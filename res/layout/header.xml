@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="48dip"
+    android:background="@android:color/background_light"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="5dp"
+        android:src="@drawable/concrn_logo" />
+
+    <Button
+        android:id="@+id/bt_911"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:gravity="right|center"
+        android:onClick="Call911"
+        android:padding="5dp"
+        android:text="911"
+        android:textColor="@color/red"
+        android:textSize="16sp" />
+
+</RelativeLayout>

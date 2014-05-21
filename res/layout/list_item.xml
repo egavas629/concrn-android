@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:ellipsize="marquee"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:text="laskdjaklj"
+        android:padding="10dp" />
+
+     <TextView
+         android:id="@+id/textChoosed"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_toLeftOf="@+id/image_next"
+         android:layout_toRightOf="@+id/textView"
+         android:ellipsize="marquee"
+         android:gravity="right"
+         android:padding="10dp"
+         android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/image_next"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:src="@drawable/arrow_right"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/checkBox"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        android:src="@drawable/checkmark"
+        android:visibility="gone" />
+
+</RelativeLayout>

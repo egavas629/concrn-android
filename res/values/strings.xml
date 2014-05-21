@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Concrn</string>
+    <string name="name_and_number">Please enter your name and \nphone number to continue.</string>
+    <string name="bt_continue">Continue</string>
+    <string name="address_unavailable">Address unavailable</string>
+    <string name="bt_report_crises">Report</string>
+    <string name="call_911">In case of emergency, always call 911</string>
+    <string name="current_location">"Concrn" Would Like to Use Your Current Location</string>
+    <string name="bt_ok">OK</string>
+    <string name="name">Name</string>
+    <string name="phone">Phone Number</string>
+    <string name="bt_dont_allow">Don\'t Allow</string>
+    <string name="call_dialog_message">Tap OK to call 911</string>
+    <string name="bt_cancel">Cancel</string>
+    <string name="emergancy_note">If you observe a crime or a threat of\nviolence, call 911 immediately</string>
+    <string name="bt_update_crises">Update</string>
+
+</resources>
