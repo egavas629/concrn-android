@@ -28,8 +28,10 @@ public class MainActivity extends FragmentActivity {
 		name = (EditText) findViewById(R.id.edit_name);
 		phone = (EditText)findViewById(R.id.edit_phone);
 		if(user!=null){
-			name.setText(user.name);
-			phone.setText(user.phone);
+		//	name.setText(user.name);
+		//	phone.setText(user.phone);
+			helper.startActivity(MapActivity.class);
+			finish();
 		}
 		setUpDialog();
 	}
@@ -48,5 +50,6 @@ public class MainActivity extends FragmentActivity {
 		User user = new User(Constants.report.name, Constants.report.phone);
 		memory.SaveArrayPreferences(MainActivity.this, "LOGIN", user);
 		helper.startActivity(MapActivity.class);
+		finish();
 	}
 }
