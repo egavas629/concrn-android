@@ -6,45 +6,65 @@ import java.util.Locale;
 
 import software_nation.concrn.android.model.Constants;
 import software_nation.concrn.android.view.ShowCallDialogView;
+import android.content.Context;
+import android.graphics.Point;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.VisibleRegion;
 
-public class MapActivity extends FragmentActivity {
+
+public class MapActivity extends FragmentActivity 
+{
 	private GoogleMap mMap;
 	TextView address;
-	Marker marker;
+	MarkerOptions marker;
 	double currentLongitude = 0;
 	double currentLatitude = 0;
 	LatLng position = null;
+	LocationManager locManager;
+	String provider;
+	Location location;
+	Marker now;
+	VisibleRegion visibleRegion;
+	Point centerPoint;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map_view);
 		address = (TextView) findViewById(R.id.text_street_name);
+
 		setUpMapIfNeeded();
 	}
 
 	private void setUpMapIfNeeded() {
 		//checking if map is loaded
-		if (mMap == null) {
-			mMap = ((SupportMapFragment) getSupportFragmentManager()
-					.findFragmentById(R.id.map)).getMap();
+		if (mMap == null) 
+		{
+
+			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 			if (mMap != null) {
 				setUpMapSettings(mMap);
 				if (Constants.isPositionAllowed) {
@@ -53,25 +73,38 @@ public class MapActivity extends FragmentActivity {
 
 						@Override
 						public void onMyLocationChange(Location arg0) {
+
+							if(now !=null){
+								now.remove();
+							}
 							currentLongitude = arg0.getLongitude();
 							currentLatitude = arg0.getLatitude();
+
+							marker = new MarkerOptions().position(new LatLng(currentLatitude, currentLongitude)).title("User Current Location in  Map ");
+
+							marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
+
+							if(now==null)
+								mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude, currentLongitude), 18.0f));
+
+							now = mMap.addMarker(marker);
+
 						}
 					});
 
 				} else
-					mMap.setMyLocationEnabled(false);
 
-				mMap.setOnCameraChangeListener(new OnCameraChangeListener() {
+					mMap.setMyLocationEnabled(false);
+				    mMap.setOnCameraChangeListener(new OnCameraChangeListener() {
 					public void onCameraChange(CameraPosition arg0) {
 						position = arg0.target;
-						if (position != null
-								&& position.latitude != 0
-								&& position.longitude != 0) {
-							String add = getAddressByLongitudeAndLatitude(
-									position.longitude,
-									position.latitude);
+						if (position != null&& position.latitude != 0&& position.longitude != 0) 
+						{
+							/*String add = getAddressByLongitudeAndLatitude(position.longitude,position.latitude);
 							if (add != null)
-								address.setText(add);
+								address.setText(add);*/
+							address.setText(getResources().getString(R.string.updating_Location));
+							getCentrePoint();
 						}
 					}
 				});
@@ -88,12 +121,13 @@ public class MapActivity extends FragmentActivity {
 		mUiSettings.setScrollGesturesEnabled(true);
 		mUiSettings.setZoomGesturesEnabled(true);
 		mUiSettings.setTiltGesturesEnabled(true);
-		mUiSettings.setRotateGesturesEnabled(true);
+		mUiSettings.setRotateGesturesEnabled(false);
+
+
 	}
 
 	//getting address of the marker position 
-	private String getAddressByLongitudeAndLatitude(double longitude,
-			double latitude) {
+	private String getAddressByLongitudeAndLatitude(double longitude,double latitude) {
 		Geocoder geocoder;
 		String result = null;
 		List<Address> addresses;
@@ -102,12 +136,13 @@ public class MapActivity extends FragmentActivity {
 			addresses = geocoder.getFromLocation(latitude, longitude, 1);
 			if(addresses!=null && addresses.size()>0)
 				result = addresses.get(0).getAddressLine(0);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
+
 	//getting values and go to next screen	
 	public void ReportCrises(View v) {
 		if(position!=null){
@@ -127,6 +162,28 @@ public class MapActivity extends FragmentActivity {
 		ShowCallDialogView callDialog = new ShowCallDialogView();
 		callDialog.setCancelable(false);
 		callDialog.show(fragmentManager, "Activity");
+	}
+
+	/*
+	 * Function sets the center point of map 
+	 */
+
+	private void getCentrePoint(){
+
+		visibleRegion = mMap.getProjection() .getVisibleRegion();
+
+		Point x = mMap.getProjection().toScreenLocation(visibleRegion.farRight);
+
+		Point y = mMap.getProjection().toScreenLocation(visibleRegion.nearLeft);
+
+		centerPoint = new Point(x.x / 2, y.y / 2);
+
+		LatLng centerFromPoint = mMap.getProjection().fromScreenLocation( centerPoint);
+
+		String add = getAddressByLongitudeAndLatitude(centerFromPoint.longitude,centerFromPoint.latitude);
+		if (add != null)
+			address.setText(add);
+
 	}
 
 }
