@@ -23,7 +23,6 @@ import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -45,6 +44,7 @@ public class MapActivity extends FragmentActivity
 	Marker now;
 	VisibleRegion visibleRegion;
 	Point centerPoint;
+	Boolean hasUpdatedPosition = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,20 +70,16 @@ public class MapActivity extends FragmentActivity
 						@Override
 						public void onMyLocationChange(Location arg0) {
 
-							if(now !=null){
-								now.remove();
-							}
+							
 							currentLongitude = arg0.getLongitude();
 							currentLatitude = arg0.getLatitude();
 
-							marker = new MarkerOptions().position(new LatLng(currentLatitude, currentLongitude)).title("User Current Location in  Map ");
-
-							marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
-
-							if(now==null)
+							
+							if(!hasUpdatedPosition) {
 								mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude, currentLongitude), 18.0f));
-
-							now = mMap.addMarker(marker);
+								hasUpdatedPosition = true;
+							}
+							
 
 						}
 					});
@@ -126,14 +122,17 @@ public class MapActivity extends FragmentActivity
 	private String getAddressByLongitudeAndLatitude(double longitude,double latitude) {
 		Geocoder geocoder;
 		String result = null;
-		List<Address> addresses;
+		List<Address> addresses = null;
 		geocoder = new Geocoder(this, Locale.getDefault());
 		try {
+			
 			addresses = geocoder.getFromLocation(latitude, longitude, 1);
+			
 			if(addresses!=null && addresses.size()>0)
 				result = addresses.get(0).getAddressLine(0);
 
 		} catch (IOException e) {
+			result = "Address unavailable";
 			e.printStackTrace();
 		}
 		return result;
@@ -176,7 +175,7 @@ public class MapActivity extends FragmentActivity
 
 		LatLng centerFromPoint = mMap.getProjection().fromScreenLocation( centerPoint);
 
-		String add = getAddressByLongitudeAndLatitude(centerFromPoint.longitude,centerFromPoint.latitude);
+		String add = getAddressByLongitudeAndLatitude(centerFromPoint.longitude, centerFromPoint.latitude);
 		if (add != null)
 			address.setText(add);
 
