@@ -34,6 +34,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class GetReportAtributesActivity extends FragmentActivity {
 	private static final int CAMERA_REQUEST = 1888; 
@@ -69,8 +70,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		setUpAgeItems();
 		setUpRaceItems();
 		setUpSettingsItems();
-
-
+		
 		list = (ListView) findViewById(R.id.listView_main);
 		adapter = new EntryAdapter(GetReportAtributesActivity.this, items);
 		list.setAdapter(adapter);
@@ -87,7 +87,9 @@ public class GetReportAtributesActivity extends FragmentActivity {
 						|| item.title.equalsIgnoreCase("Anxious")
 						|| item.title.equalsIgnoreCase("Depressed")
 						|| item.title.equalsIgnoreCase("Aggravated")
-						|| item.title.equalsIgnoreCase("Threatening"))
+						|| item.title.equalsIgnoreCase("Threatening")) {
+					
+				}
 
 					//Constants.report.observations = Constants.report.observations + " "+item.title;
 					//indexesList.add(arg2);
@@ -245,15 +247,16 @@ public class GetReportAtributesActivity extends FragmentActivity {
 
 		/*stores the lat long phone address name */
 		String url = "http://www.concrn.com/reports";
-		
-
 		int reportID = 0;
-
-		String result = helper.POST(url, getReport().toString(), null);
+		String report = getReport().toString();
+		String result = helper.POST(url, report, null);
 		JSONObject jObj;
+		
 		try {
 			jObj = new JSONObject(result);
-			reportID = Integer.parseInt(jObj.getString("id"));
+			if(jObj.getString("id") != null && jObj.getString("id").equalsIgnoreCase("null")) {
+				reportID = Integer.parseInt(jObj.getString("id"));
+			}
 		}catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -272,6 +275,8 @@ public class GetReportAtributesActivity extends FragmentActivity {
 				Constants.report.phone = phone;
 				finish();				
 			}
+		} else {
+			Toast.makeText(getApplicationContext(), "There was an error uploading your report", Toast.LENGTH_LONG).show();
 		}
 	}
 
