@@ -1,10 +1,7 @@
 package software_nation.concrn.android.shell;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import com.loopj.android.http.*;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
@@ -17,8 +14,6 @@ import org.apache.http.entity.mime.FormBodyPart;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.ByteArrayBody;
-import org.apache.http.entity.mime.content.ContentBody;
-import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;

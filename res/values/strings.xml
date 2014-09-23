@@ -16,5 +16,6 @@
     <string name="bt_cancel">Cancel</string>
     <string name="emergancy_note">If you observe a crime or a threat of\nviolence, call 911 immediately</string>
     <string name="bt_update_crises">Update</string>
+    <string name="updating_Location">Updating location</string>
 
 </resources>
