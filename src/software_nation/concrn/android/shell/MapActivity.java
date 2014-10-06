@@ -25,8 +25,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 
 
@@ -34,14 +32,12 @@ public class MapActivity extends FragmentActivity
 {
 	private GoogleMap mMap;
 	TextView address;
-	MarkerOptions marker;
 	double currentLongitude = 0;
 	double currentLatitude = 0;
 	LatLng position = null;
 	LocationManager locManager;
 	String provider;
 	Location location;
-	Marker now;
 	VisibleRegion visibleRegion;
 	Point centerPoint;
 	Boolean hasUpdatedPosition = false;
@@ -92,9 +88,6 @@ public class MapActivity extends FragmentActivity
 						position = arg0.target;
 						if (position != null&& position.latitude != 0&& position.longitude != 0) 
 						{
-							/*String add = getAddressByLongitudeAndLatitude(position.longitude,position.latitude);
-							if (add != null)
-								address.setText(add);*/
 							address.setText(getResources().getString(R.string.updating_Location));
 							getCentrePoint();
 						}
