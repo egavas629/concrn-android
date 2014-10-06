@@ -246,7 +246,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		//		String url = "http://rangers.concrn.com/reports";
 
 		/*stores the lat long phone address name */
-		String url = "http://www.concrn.com/reports";
+		String url = Constants.BASE_URL + "/reports";
 		int reportID = 0;
 		String report = getReport().toString();
 		String result = helper.POST(url, report, null);
