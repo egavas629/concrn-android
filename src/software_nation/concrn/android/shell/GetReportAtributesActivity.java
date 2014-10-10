@@ -134,11 +134,13 @@ public class GetReportAtributesActivity extends FragmentActivity {
 	}
 
 	private void setUpSections() {
+		items.add(new SectionItem("Report Information"));
+		items.add(new EntryItem("Urgency", true, false, "Report Information"));
 		items.add(new SectionItem("Patient Description"));
 		items.add(new EntryItem("Gender", true, false, "Patient Description"));
 		items.add(new EntryItem("Age Group", true, false, "Patient Description"));
 		items.add(new EntryItem("Race/Ethniticity", true, false, "Patient Description"));
-		items.add(new EntryItem("Urgency", true, false, "Patient Description"));
+		
 		items.add(new EntryItem("Crisis Setting", true, false, "Patient Description"));
 
 		items.add(new SectionItem("Crises Observations: Is the patient..."));
