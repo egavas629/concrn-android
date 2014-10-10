@@ -46,6 +46,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 	ArrayList<Item> ageItems = new ArrayList<Item>();
 	ArrayList<Item> raceItems = new ArrayList<Item>();
 	ArrayList<Item> settingsItems = new ArrayList<Item>();
+	ArrayList<Item> urgencyItems = new ArrayList<Item>();
 	Bitmap photo = null;
 	File image = null;
 	int index,top;
@@ -70,6 +71,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		setUpAgeItems();
 		setUpRaceItems();
 		setUpSettingsItems();
+		setUpUrgencyItems();
 		
 		list = (ListView) findViewById(R.id.listView_main);
 		adapter = new EntryAdapter(GetReportAtributesActivity.this, items);
@@ -116,6 +118,9 @@ public class GetReportAtributesActivity extends FragmentActivity {
 					showListSubItemsDialog(GetReportAtributesActivity.this, settingsItems, "Settings");
 					//Constants.report.observations = Constants.report.observations + " "+item.title;
 				}
+				if(item.title.equalsIgnoreCase("Urgency") && item.hasNext){
+					showListSubItemsDialog(GetReportAtributesActivity.this, urgencyItems, "Urgency");
+				}
 				if(item.title.equalsIgnoreCase("Incident Picture")){
 
 					startCameraActivity();
@@ -133,6 +138,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		items.add(new EntryItem("Gender", true, false, "Patient Description"));
 		items.add(new EntryItem("Age Group", true, false, "Patient Description"));
 		items.add(new EntryItem("Race/Ethniticity", true, false, "Patient Description"));
+		items.add(new EntryItem("Urgency", true, false, "Patient Description"));
 		items.add(new EntryItem("Crisis Setting", true, false, "Patient Description"));
 
 		items.add(new SectionItem("Crises Observations: Is the patient..."));
@@ -198,6 +204,14 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		raceItems.add(new EntryItem("Native Hawaiian or Pacific Islander", false, false, "Race"));
 		raceItems.add(new EntryItem("White", false, false, "Race"));
 		raceItems.add(new EntryItem("Other/Unknown", false, false, "Race"));		
+	}
+	
+	public void setUpUrgencyItems() {
+		urgencyItems.add(new EntryItem("1 - Not urgent", false, false, "Urgency"));
+		urgencyItems.add(new EntryItem("2 - This week", false, false, "Urgency"));
+		urgencyItems.add(new EntryItem("3 - Today", false, false, "Urgency"));
+		urgencyItems.add(new EntryItem("4 - Within an hour", false, false, "Urgency"));
+		urgencyItems.add(new EntryItem("5 - Need help now", false, false, "Urgency"));
 	}
 
 	public void setUpAgeItems() {
@@ -318,6 +332,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 
 			attr.put("observations",Constants.report.observations);		
 			attr.put("race", Constants.report.race);
+			attr.put("urgency", Constants.report.urgency);
 			attr.put("setting", Constants.report.setting);
 		
 		

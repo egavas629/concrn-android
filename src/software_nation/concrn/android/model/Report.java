@@ -14,12 +14,14 @@ public class Report {
 	public String observations = "";
 	public String race;
 	public String setting;
+	public String urgency;
 
 	public Report(String name, String phone, double latitude, double longitude,
 			String address, String neighborhood, String gender, String age,
-			String nature, String observations, String race, String setting) {
+			String nature, String observations, String race, String setting, String urgency) {
 		super();
 		this.name = name;
+		this.urgency = urgency;
 		this.phone = phone;
 		this.latitude = latitude;
 		this.longitude = longitude;

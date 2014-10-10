@@ -13,6 +13,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -58,6 +59,9 @@ public class ShowSublistItemsDialogView extends DialogFragment {
 					Constants.report.race = item.title;
 				if (group.equals("Settings"))
 					Constants.report.setting = item.title;
+				if (group.equals("Urgency")) {
+					Constants.report.urgency = item.title;
+				}
 
 				item.hasChecked = !item.hasChecked;
 				for (int i = 0; i < items.size(); i++) {
