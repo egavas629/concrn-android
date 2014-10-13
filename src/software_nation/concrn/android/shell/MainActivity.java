@@ -6,8 +6,10 @@ import software_nation.concrn.android.view.DialogView;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.telephony.PhoneNumberUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 	HelperActivity helper;
@@ -45,11 +47,15 @@ public class MainActivity extends FragmentActivity {
 
 
 	public void Continue(View v){
-		Constants.report.name = name.getText().toString();
-		Constants.report.phone = phone.getText().toString();
-		User user = new User(Constants.report.name, Constants.report.phone);
-		memory.SaveArrayPreferences(MainActivity.this, "LOGIN", user);
-		helper.startActivity(MapActivity.class);
-		finish();
+		if (PhoneNumberUtils.isGlobalPhoneNumber(phone.getText().toString())) {
+			Constants.report.name = name.getText().toString();
+			Constants.report.phone = phone.getText().toString();
+			User user = new User(Constants.report.name, Constants.report.phone);
+			memory.SaveArrayPreferences(MainActivity.this, "LOGIN", user);
+			helper.startActivity(MapActivity.class);
+			finish();
+		} else  {
+			Toast.makeText(getApplicationContext(), "Phone number invalid", Toast.LENGTH_LONG).show();
+		}
 	}
 }
