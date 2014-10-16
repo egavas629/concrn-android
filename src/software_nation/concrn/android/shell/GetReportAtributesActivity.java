@@ -30,7 +30,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -74,8 +76,11 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		setUpUrgencyItems();
 		
 		list = (ListView) findViewById(R.id.listView_main);
+		View footerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.reporting_footer, null, false);
+		list.addFooterView(footerView);
 		adapter = new EntryAdapter(GetReportAtributesActivity.this, items);
 		list.setAdapter(adapter);
+		
 		list.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -136,14 +141,14 @@ public class GetReportAtributesActivity extends FragmentActivity {
 	private void setUpSections() {
 		items.add(new SectionItem("Report Information"));
 		items.add(new EntryItem("Urgency", true, false, "Report Information"));
-		items.add(new SectionItem("Patient Description"));
+		items.add(new SectionItem("Description"));
 		items.add(new EntryItem("Gender", true, false, "Patient Description"));
 		items.add(new EntryItem("Age Group", true, false, "Patient Description"));
 		items.add(new EntryItem("Race/Ethniticity", true, false, "Patient Description"));
 		
 		items.add(new EntryItem("Crisis Setting", true, false, "Patient Description"));
 
-		items.add(new SectionItem("Crises Observations: Is the patient..."));
+		items.add(new SectionItem("Is the patient..."));
 		items.add(new EntryItem("At risk of harm", false, false,"Crisses Observation"));
 		items.add(new EntryItem("Under the influence", false, false, "Crisses Observation"));
 		items.add(new EntryItem("Anxious", false, false, "Crisses Observation"));
@@ -151,7 +156,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		items.add(new EntryItem("Aggravated", false, false, "Crisses Observation"));
 		items.add(new EntryItem("Threatening", false, false, "Crisses Observation"));
 
-		items.add(new SectionItem("Additional Description..."));
+		items.add(new SectionItem(""));
 		items.add(new EntryItem("Incident Picture", true, false, "Additionals"));		
 	}
 
@@ -254,6 +259,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		showCallDialog();
 	}
 
+	@SuppressWarnings("unused")
 	public void UploadReport(View v) {
 
 		HelperActivity helper = new HelperActivity(GetReportAtributesActivity.this);
@@ -270,9 +276,10 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		
 		try {
 			jObj = new JSONObject(result);
-			if(jObj.getString("id") != null && jObj.getString("id").equalsIgnoreCase("null")) {
+			
+			if(jObj.getString("id") != null && !jObj.getString("id").equalsIgnoreCase("null")) {
 				reportID = Integer.parseInt(jObj.getString("id"));
-			}
+			} 
 		}catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -284,6 +291,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 			System.out.println("the result of basic info is : "+result2); 
 			System.out.println("the response is : "+result2);
 			if(result2!=null){
+				Toast.makeText(getApplicationContext(), "Report successfully updated", Toast.LENGTH_LONG).show();
 				String name = Constants.report.name;
 				String phone = Constants.report.phone;
 				Constants.report = new Report();
@@ -326,7 +334,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 			attr.put("gender", Constants.report.gender);
 			attr.put("nature", Constants.report.nature);						
 
-			for (int i = 6; i < 12; i++) {
+			for (int i = 8; i < 14; i++) {
 				EntryItem item = (EntryItem) items.get(i);
 				if(item.hasChecked)
 					Constants.report.observations = Constants.report.observations + " "+item.title;
