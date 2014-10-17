@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import software_nation.concrn.android.model.Constants;
 import software_nation.concrn.android.view.ShowCallDialogView;
 import android.graphics.Point;
@@ -11,11 +14,14 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -138,7 +144,61 @@ public class MapActivity extends FragmentActivity
 			Constants.report.longitude =position.longitude;
 			Constants.report.address = getAddressByLongitudeAndLatitude(position.longitude, position.latitude);
 		}
-		new HelperActivity(MapActivity.this).startActivity(GetReportAtributesActivity.class);
+
+		new CreateReportTask().execute("Trying");
+	}
+	
+	class CreateReportTask extends AsyncTask<String, Void, String> {
+
+		@Override
+		protected String doInBackground(String... arg0) {
+			HelperActivity helper = new HelperActivity(MapActivity.this);
+			String url = Constants.BASE_URL + "/reports";
+			String report = getReport().toString();
+			String result = helper.POST(url, report, null);
+			return result;
+		}
+		
+		protected void onPostExecute(String result) {
+			JSONObject jObj;
+			
+			try {
+				jObj = new JSONObject(result);
+				Constants.report.id = 0;
+				if(jObj.getString("id") != null && !jObj.getString("id").equalsIgnoreCase("null")) {
+					Constants.report.id = Integer.parseInt(jObj.getString("id"));
+				} 
+				Log.e("Tag", "In it");
+				if (Constants.report.id > 0) {
+					new HelperActivity(MapActivity.this).startActivity(GetReportAtributesActivity.class);
+				} else {
+					Toast.makeText(getApplicationContext(), "There was an error uploading your report", Toast.LENGTH_LONG).show();
+				}
+			}catch (JSONException e) {
+				Toast.makeText(getApplicationContext(), "There was an error uploading your report", Toast.LENGTH_LONG).show();
+				e.printStackTrace();
+			}
+	    }
+		
+	}
+	
+	private JSONObject getReport() {
+		JSONObject request = new JSONObject();
+		JSONObject attr = new JSONObject();
+		try {
+			attr.put("address", Constants.report.address);
+			attr.put("lat", Constants.report.latitude);
+			attr.put("long", Constants.report.longitude);
+			attr.put("name", Constants.report.name);
+			attr.put("phone", Constants.report.phone);
+
+			request.put("report", attr);
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+		}
+		Log.v("Result using JSON:", request.toString());
+
+		return request;
 	}
 
 	public void Call911(View v) {

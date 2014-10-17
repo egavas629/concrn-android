@@ -146,9 +146,9 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		items.add(new EntryItem("Age Group", true, false, "Patient Description"));
 		items.add(new EntryItem("Race/Ethniticity", true, false, "Patient Description"));
 		
-		items.add(new EntryItem("Crisis Setting", true, false, "Patient Description"));
+		items.add(new EntryItem("Setting", true, false, "Patient Description"));
 
-		items.add(new SectionItem("Is the patient..."));
+		items.add(new SectionItem("The person is..."));
 		items.add(new EntryItem("At risk of harm", false, false,"Crisses Observation"));
 		items.add(new EntryItem("Under the influence", false, false, "Crisses Observation"));
 		items.add(new EntryItem("Anxious", false, false, "Crisses Observation"));
@@ -269,59 +269,28 @@ public class GetReportAtributesActivity extends FragmentActivity {
 
 		/*stores the lat long phone address name */
 		String url = Constants.BASE_URL + "/reports";
-		int reportID = 0;
-		String report = getReport().toString();
-		String result = helper.POST(url, report, null);
-		JSONObject jObj;
+		int reportID = Constants.report.id;
 		
-		try {
-			jObj = new JSONObject(result);
-			
-			if(jObj.getString("id") != null && !jObj.getString("id").equalsIgnoreCase("null")) {
-				reportID = Integer.parseInt(jObj.getString("id"));
-			} 
-		}catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-
-		if(reportID>0){
-			String result2 = helper.POST(url+"/"+reportID+"/upload", getExtendedReport().toString(), data);
-			Log.v("Result of basic info is :", result2);
-			System.out.println("the result of basic info is : "+result2); 
-			System.out.println("the response is : "+result2);
-			if(result2!=null){
-				Toast.makeText(getApplicationContext(), "Report successfully updated", Toast.LENGTH_LONG).show();
-				String name = Constants.report.name;
-				String phone = Constants.report.phone;
-				Constants.report = new Report();
-				Constants.report.name = name;
-				Constants.report.phone = phone;
-				finish();				
-			}
+		
+		String result2 = helper.POST(url+"/"+reportID+"/upload", getExtendedReport().toString(), data);
+		Log.v("Result of basic info is :", result2);
+		System.out.println("the result of basic info is : "+result2); 
+		System.out.println("the response is : "+result2);
+		if(result2!=null){
+			Toast.makeText(getApplicationContext(), "Report successfully updated", Toast.LENGTH_LONG).show();
+			String name = Constants.report.name;
+			String phone = Constants.report.phone;
+			Constants.report = new Report();
+			Constants.report.name = name;
+			Constants.report.phone = phone;
+			finish();				
 		} else {
-			Toast.makeText(getApplicationContext(), "There was an error uploading your report", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "There was an issue updating your report", Toast.LENGTH_LONG).show();
 		}
+		
 	}
 
-	private JSONObject getReport() {
-		JSONObject request = new JSONObject();
-		JSONObject attr = new JSONObject();
-		try {
-			attr.put("address", Constants.report.address);
-			attr.put("lat", Constants.report.latitude);
-			attr.put("long", Constants.report.longitude);
-			attr.put("name", Constants.report.name);
-			attr.put("phone", Constants.report.phone);
-
-			request.put("report", attr);
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		}
-		Log.v("Result using JSON:", request.toString());
-
-		return request;
-	}
+	
 
 	private JSONObject getExtendedReport() {
 		JSONObject request = new JSONObject();

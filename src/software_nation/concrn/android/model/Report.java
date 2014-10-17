@@ -15,10 +15,11 @@ public class Report {
 	public String race;
 	public String setting;
 	public String urgency;
+	public int id;
 
 	public Report(String name, String phone, double latitude, double longitude,
 			String address, String neighborhood, String gender, String age,
-			String nature, String observations, String race, String setting, String urgency) {
+			String nature, String observations, String race, String setting, String urgency, int id) {
 		super();
 		this.name = name;
 		this.urgency = urgency;
@@ -33,6 +34,7 @@ public class Report {
 		this.observations = observations;
 		this.race = race;
 		this.setting = setting;
+		this.id = id;
 	}
 
 	public Report(){
