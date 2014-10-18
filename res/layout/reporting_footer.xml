@@ -6,6 +6,7 @@
     <EditText 
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:id="@+id/report_footer_edit_text"
         android:hint="@string/add_information"/>
 
 </LinearLayout>

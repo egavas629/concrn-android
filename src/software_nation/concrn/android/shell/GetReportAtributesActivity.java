@@ -32,9 +32,9 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -49,6 +49,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 	ArrayList<Item> raceItems = new ArrayList<Item>();
 	ArrayList<Item> settingsItems = new ArrayList<Item>();
 	ArrayList<Item> urgencyItems = new ArrayList<Item>();
+	EditText natueEditText;
 	Bitmap photo = null;
 	File image = null;
 	int index,top;
@@ -76,8 +77,9 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		setUpUrgencyItems();
 		
 		list = (ListView) findViewById(R.id.listView_main);
-		View footerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.reporting_footer, null, false);
+		View footerView=  ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.reporting_footer, null, false);
 		list.addFooterView(footerView);
+		natueEditText = (EditText) footerView.findViewById(R.id.report_footer_edit_text);
 		adapter = new EntryAdapter(GetReportAtributesActivity.this, items);
 		list.setAdapter(adapter);
 		
@@ -313,7 +315,10 @@ public class GetReportAtributesActivity extends FragmentActivity {
 			attr.put("race", Constants.report.race);
 			attr.put("urgency", Constants.report.urgency);
 			attr.put("setting", Constants.report.setting);
-		
+			
+			if (natueEditText.getText().toString() != null) {
+				attr.put("nature", natueEditText.getText().toString());
+			}
 		
 
 			request.put("report", attr);
