@@ -118,7 +118,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 					showListSubItemsDialog(GetReportAtributesActivity.this, raceItems, "Race");
 					//Constants.report.observations = Constants.report.observations + " "+item.title;
 				}
-				if(item.title.equalsIgnoreCase("Crisis Setting") && item.hasNext){
+				if(item.title.equalsIgnoreCase("Setting") && item.hasNext){
 
 					showListSubItemsDialog(GetReportAtributesActivity.this, settingsItems, "Settings");
 					//Constants.report.observations = Constants.report.observations + " "+item.title;

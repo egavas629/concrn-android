@@ -57,7 +57,7 @@ public class EntryAdapter extends ArrayAdapter<Item> {
 					holder.choosed.setText(Constants.report.age);
 				if(ei.title.equals("Race/Ethniticity") && Constants.report.race!=null)
 					holder.choosed.setText(Constants.report.race);
-				if(ei.title.equals("Crisis Setting") && Constants.report.setting!=null)
+				if(ei.title.equals("Setting") && Constants.report.setting!=null)
 					holder.choosed.setText(Constants.report.setting);
 				if(ei.title.equals("Urgency") && Constants.report.urgency!=null)
 					holder.choosed.setText(Constants.report.urgency);
