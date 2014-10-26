@@ -128,7 +128,8 @@ public class MapActivity extends FragmentActivity
 			addresses = geocoder.getFromLocation(latitude, longitude, 1);
 			
 			if(addresses!=null && addresses.size()>0)
-				result = addresses.get(0).getAddressLine(0);
+				result = addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1);
+				Log.e("Tagging", result);
 
 		} catch (IOException e) {
 			result = "Address unavailable";
