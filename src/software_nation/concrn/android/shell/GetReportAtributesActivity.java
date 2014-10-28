@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -307,15 +308,24 @@ public class GetReportAtributesActivity extends FragmentActivity {
 
 			for (int i = 8; i < 14; i++) {
 				EntryItem item = (EntryItem) items.get(i);
-				if(item.hasChecked)
-					Constants.report.observations = Constants.report.observations + " "+item.title;
+				if(item.hasChecked) {
+					if (Constants.report.observations.isEmpty()) {
+						Constants.report.observations = item.title;
+					} else {
+						Constants.report.observations = Constants.report.observations + ", "+item.title;
+					}
+				}
 			}			
 
-			attr.put("observations",Constants.report.observations);		
+			JSONArray jsonArray = new JSONArray();
+			jsonArray.put(Constants.report.observations);
+			attr.put("observations", jsonArray);		
 			attr.put("race", Constants.report.race);
-			attr.put("urgency", Constants.report.urgency);
 			attr.put("setting", Constants.report.setting);
-			
+			if (Constants.report.urgency.length()>0) {
+				String urgency = Constants.report.urgency.substring(0, 1);
+				attr.put("urgency", urgency);
+			}
 			if (natueEditText.getText().toString() != null) {
 				attr.put("nature", natueEditText.getText().toString());
 			}
