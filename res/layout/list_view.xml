@@ -36,10 +36,10 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/update_report_button"
         style="@style/Button_theme"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/button_height"
-        android:onClick="UploadReport"
         android:layout_margin="20dp"
         android:text="@string/bt_update_crises" />
 

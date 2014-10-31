@@ -1,6 +1,7 @@
 package software_nation.concrn.android.shell;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -9,12 +10,12 @@ import java.io.Serializable;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.FormBodyPart;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -139,7 +140,7 @@ public class HelperActivity {
 		return result;
 	}*/
 
-	public String POST(String url, String jsonObject, byte[]  data) {
+	public String POST(String url, JSONObject jsonObject, File  data) {
 		InputStream inputStream = null;
 		String result = "";
 		try {
@@ -147,76 +148,39 @@ public class HelperActivity {
 			HttpClient httpclient = new DefaultHttpClient();
 
 			HttpPost httpPost = new HttpPost(url);
-			//	FormBodyPart jsonBodyPart = new FormBodyPart("json", jsonBody);
+			
 			if(data!=null){
-				MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-				/*ContentBody cbFile = new FileBody(imageFile, "image/jpeg");
-				entity.addPart("image", cbFile);
+				
+		        
+				MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();
+				multipartEntity.addPart("report", new StringBody(jsonObject.getJSONObject("report").toString(), ContentType.TEXT_PLAIN));
+		        multipartEntity.addBinaryBody("image", data, ContentType.create("image/jpeg"), "image.jpg");
+		        
+		        httpPost.setEntity(multipartEntity.build());
+		        Log.e("Tagging", "Trying to post if");
+			} else {
+				StringEntity se = new StringEntity(jsonObject.toString());
+				httpPost.setEntity(se);
+				// }
 
-				httpPost.setEntity(entity);*/
-
-				ByteArrayBody imageByteArrayBody = new ByteArrayBody(data, "image/png", "avatar.png");
-		        FormBodyPart imageFormBodyPart = new FormBodyPart("image", imageByteArrayBody);
-		        imageFormBodyPart.addField("Content-Disposition", "form-data; name=\"aPhoto\"");
-		        imageFormBodyPart.addField("name", "aPhoto");
-		        imageFormBodyPart.addField("image_file_name", "avatar.png");
-		        imageFormBodyPart.addField("image_content_type", "image/jpeg");
-		        entity.addPart(imageFormBodyPart);
-		        httpPost.setEntity(entity);
+				httpPost.setHeader("Accept", "text/javascript");
+				httpPost.setHeader("Content-type", "application/json");
+				Log.e("Tagging", "Trying to post else");
 			}
-
-			//else{
-			/***********************************************************************/
-
-
-			/*	   FileBody bin = new FileBody(file);  
-
-
-			   Charset chars = Charset.forName("UTF-8");
-
-			   MultipartEntity reqEntity = new MultipartEntity();  
-			   reqEntity.addPart("problem[photos_attributes][0][image]", bin);  
-			   reqEntity.addPart("problem[category_id]", new StringBody("17", chars));
-
-        			   post.setEntity(reqEntity); 
-			   HttpResponse response = client.execute(post);  
-
-			   HttpEntity resEntity = response.getEntity();  
-			   if (resEntity != null) {    
-			     resEntity.consumeContent();  
-			  }
-
-			   return true;
-
-
-				MultipartEntity multipartEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-		    for (NameValuePair nameValuePair : nameValuePairs) {
-		        if (nameValuePair.getName().equalsIgnoreCase("picture")) {
-		                File imgFile = new File(nameValuePair.getValue());
-		                FileBody fileBody = new FileBody(imgFile, "image/jpeg");
-		                multipartEntity.addPart("post[picture]", fileBody);
-		        } else {
-		                multipartEntity.addPart("post[" + nameValuePair.getName() + "]", new StringBody(nameValuePair.getValue()));
-		        }                   
-		    }
-		httpPost.setEntity(multipartEntity);
-		HttpResponse response = httpClient.execute(httpPost, httpContext);*/
-			/*************************************************************************/
-
-			StringEntity se = new StringEntity(jsonObject);
-			httpPost.setEntity(se);
-			// }
-
-			httpPost.setHeader("Accept", "text/javascript");
-			httpPost.setHeader("Content-type", "application/json");
-
+			
+			Log.e("tagging", "Close to posting");
+			
+			
 			HttpResponse httpResponse = httpclient.execute(httpPost);
 			inputStream = httpResponse.getEntity().getContent();
 			if (inputStream != null) {
 				result = convertInputStreamToString(inputStream);
-				Log.v("Radi: ", "radi\n" + result);                               
-			} else
-				result = "Did not work!";                                     
+				Log.v("Radi: ", "radi\n" + result); 
+				Log.e("Tagging", "Input stream");
+			} else {
+				result = "Did not work!";   
+				Log.e("Tagging", "No input stream");
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

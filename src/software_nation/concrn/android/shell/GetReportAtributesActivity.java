@@ -24,6 +24,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.MediaStore;
@@ -33,8 +34,10 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -56,6 +59,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 	int index,top;
 	Bitmap bitmap;
 	String base69Data;
+	Button updateButton;
 	byte[] data;
 
 	@Override
@@ -63,10 +67,6 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_view);
-		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-		.detectAll().penaltyLog().penaltyDeath().build());
-		StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll()
-				.penaltyLog().penaltyDeath().build());
 		/*custom list implemented so the GUI of list looks just like on iOS; 
 		 * list uses custom classes EntryItem (for the items) and Section Item (for the headings)
 		 */
@@ -76,7 +76,15 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		setUpRaceItems();
 		setUpSettingsItems();
 		setUpUrgencyItems();
-		
+		updateButton = (Button) findViewById(R.id.update_report_button);
+		updateButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Log.e("Tagging", "Received click");
+				new UploadReportTask().execute("");
+			}
+		});
 		list = (ListView) findViewById(R.id.listView_main);
 		View footerView=  ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.reporting_footer, null, false);
 		list.addFooterView(footerView);
@@ -139,6 +147,30 @@ public class GetReportAtributesActivity extends FragmentActivity {
 			}
 
 		});
+	}
+	
+	private class UploadReportTask extends AsyncTask<String, String, String> {
+
+		@Override
+		protected String doInBackground(String... params) {
+			return UploadReport();
+		}
+		
+		@Override
+		protected void onPostExecute (String result){
+			if(result!=null){
+				Toast.makeText(getApplicationContext(), "Report successfully updated", Toast.LENGTH_LONG).show();
+				String name = Constants.report.name;
+				String phone = Constants.report.phone;
+				Constants.report = new Report();
+				Constants.report.name = name;
+				Constants.report.phone = phone;
+				finish();				
+			} else {
+				Toast.makeText(getApplicationContext(), "There was an issue updating your report", Toast.LENGTH_LONG).show();
+			}
+		}
+		
 	}
 
 	private void setUpSections() {
@@ -262,8 +294,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		showCallDialog();
 	}
 
-	@SuppressWarnings("unused")
-	public void UploadReport(View v) {
+	public String UploadReport() {
 
 		HelperActivity helper = new HelperActivity(GetReportAtributesActivity.this);
 
@@ -275,21 +306,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		int reportID = Constants.report.id;
 		
 		
-		String result2 = helper.POST(url+"/"+reportID+"/upload", getExtendedReport().toString(), data);
-		Log.v("Result of basic info is :", result2);
-		System.out.println("the result of basic info is : "+result2); 
-		System.out.println("the response is : "+result2);
-		if(result2!=null){
-			Toast.makeText(getApplicationContext(), "Report successfully updated", Toast.LENGTH_LONG).show();
-			String name = Constants.report.name;
-			String phone = Constants.report.phone;
-			Constants.report = new Report();
-			Constants.report.name = name;
-			Constants.report.phone = phone;
-			finish();				
-		} else {
-			Toast.makeText(getApplicationContext(), "There was an issue updating your report", Toast.LENGTH_LONG).show();
-		}
+		return helper.POST(url+"/"+reportID+"/upload", getExtendedReport(), image);
 		
 	}
 
@@ -322,7 +339,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 			attr.put("observations", jsonArray);		
 			attr.put("race", Constants.report.race);
 			attr.put("setting", Constants.report.setting);
-			if (Constants.report.urgency.length()>0) {
+			if (Constants.report.urgency != null && Constants.report.urgency.length()>0) {
 				String urgency = Constants.report.urgency.substring(0, 1);
 				attr.put("urgency", urgency);
 			}

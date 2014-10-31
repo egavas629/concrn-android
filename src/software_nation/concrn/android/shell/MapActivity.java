@@ -155,8 +155,7 @@ public class MapActivity extends FragmentActivity
 		protected String doInBackground(String... arg0) {
 			HelperActivity helper = new HelperActivity(MapActivity.this);
 			String url = Constants.BASE_URL + "/reports";
-			String report = getReport().toString();
-			String result = helper.POST(url, report, null);
+			String result = helper.POST(url, getReport(), null);
 			return result;
 		}
 		
