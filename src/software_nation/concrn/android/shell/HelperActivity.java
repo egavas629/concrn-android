@@ -157,7 +157,6 @@ public class HelperActivity {
 		        multipartEntity.addBinaryBody("image", data, ContentType.create("image/jpeg"), "image.jpg");
 		        
 		        httpPost.setEntity(multipartEntity.build());
-		        Log.e("Tagging", "Trying to post if");
 			} else {
 				StringEntity se = new StringEntity(jsonObject.toString());
 				httpPost.setEntity(se);
@@ -165,10 +164,8 @@ public class HelperActivity {
 
 				httpPost.setHeader("Accept", "text/javascript");
 				httpPost.setHeader("Content-type", "application/json");
-				Log.e("Tagging", "Trying to post else");
 			}
 			
-			Log.e("tagging", "Close to posting");
 			
 			
 			HttpResponse httpResponse = httpclient.execute(httpPost);
@@ -176,10 +173,9 @@ public class HelperActivity {
 			if (inputStream != null) {
 				result = convertInputStreamToString(inputStream);
 				Log.v("Radi: ", "radi\n" + result); 
-				Log.e("Tagging", "Input stream");
+				Log.e("Tagging Result",  result);
 			} else {
 				result = "Did not work!";   
-				Log.e("Tagging", "No input stream");
 			}
 
 		} catch (Exception e) {

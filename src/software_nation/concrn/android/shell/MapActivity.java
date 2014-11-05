@@ -128,10 +128,11 @@ public class MapActivity extends FragmentActivity
 			addresses = geocoder.getFromLocation(latitude, longitude, 1);
 			
 			if(addresses!=null && addresses.size()>0)
-				result = addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1);
-				Log.e("Tagging", result);
+				Constants.report.address = addresses.get(0).getAddressLine(0) + ", " + addresses.get(0).getAddressLine(1);
+				result = addresses.get(0).getAddressLine(0);
 
 		} catch (IOException e) {
+			Constants.report.address = "Address unavailable";
 			result = "Address unavailable";
 			e.printStackTrace();
 		}
@@ -143,7 +144,6 @@ public class MapActivity extends FragmentActivity
 		if(position!=null){
 			Constants.report.latitude =position.latitude;
 			Constants.report.longitude =position.longitude;
-			Constants.report.address = getAddressByLongitudeAndLatitude(position.longitude, position.latitude);
 		}
 
 		new CreateReportTask().execute("Trying");
@@ -168,8 +168,9 @@ public class MapActivity extends FragmentActivity
 				if(jObj.getString("id") != null && !jObj.getString("id").equalsIgnoreCase("null")) {
 					Constants.report.id = Integer.parseInt(jObj.getString("id"));
 				} 
-				Log.e("Tag", "In it");
 				if (Constants.report.id > 0) {
+					Constants.report.agency = jObj.getJSONObject("agency").getString("name");
+					Toast.makeText(getApplicationContext(), "Report successfully submitted to "+jObj.getJSONObject("agency").getString("name"), Toast.LENGTH_LONG).show();
 					new HelperActivity(MapActivity.this).startActivity(GetReportAtributesActivity.class);
 				} else {
 					Toast.makeText(getApplicationContext(), "There was an error uploading your report", Toast.LENGTH_LONG).show();

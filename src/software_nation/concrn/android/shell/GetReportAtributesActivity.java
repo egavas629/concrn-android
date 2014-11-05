@@ -26,7 +26,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -70,6 +69,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		/*custom list implemented so the GUI of list looks just like on iOS; 
 		 * list uses custom classes EntryItem (for the items) and Section Item (for the headings)
 		 */
+		Constants.report.urgency = "1 - Not urgent";
 		setUpSections();
 		setUpGenderItems();
 		setUpAgeItems();
@@ -137,10 +137,10 @@ public class GetReportAtributesActivity extends FragmentActivity {
 				if(item.title.equalsIgnoreCase("Urgency") && item.hasNext){
 					showListSubItemsDialog(GetReportAtributesActivity.this, urgencyItems, "Urgency");
 				}
-				if(item.title.equalsIgnoreCase("Incident Picture")){
-
-					startCameraActivity();
-				}
+//				if(item.title.equalsIgnoreCase("Incident Picture")){
+//
+//					startCameraActivity();
+//				}
 
 				storePosition();
 				updateItem(item);
@@ -158,8 +158,15 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		
 		@Override
 		protected void onPostExecute (String result){
+			
 			if(result!=null){
-				Toast.makeText(getApplicationContext(), "Report successfully updated", Toast.LENGTH_LONG).show();
+				
+				if (Constants.report.agency.equalsIgnoreCase("Concrn Team")) {
+					Toast.makeText(getApplicationContext(), "Thank you for reporting your concrn. Each report pulls Concrn closer to active service in your community. Tell your friends!", Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(getApplicationContext(), "Report successfully updated. "+ Constants.report.agency + " will respond as soon as possible.", Toast.LENGTH_LONG).show();
+				}
+				
 				String name = Constants.report.name;
 				String phone = Constants.report.phone;
 				Constants.report = new Report();
@@ -192,7 +199,7 @@ public class GetReportAtributesActivity extends FragmentActivity {
 		items.add(new EntryItem("Threatening", false, false, "Crisses Observation"));
 
 		items.add(new SectionItem(""));
-		items.add(new EntryItem("Incident Picture", true, false, "Additionals"));		
+		//items.add(new EntryItem("Incident Picture", true, false, "Additionals"));		
 	}
 
 	/*method for getting image using Camera*/
