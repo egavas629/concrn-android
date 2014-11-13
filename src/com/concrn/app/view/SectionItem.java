@@ -1,4 +1,4 @@
-package software_nation.concrn.android.view;
+package com.concrn.app.view;
 
 public class SectionItem implements Item {
 	private final String title;

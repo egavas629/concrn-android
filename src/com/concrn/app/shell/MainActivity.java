@@ -1,8 +1,9 @@
-package software_nation.concrn.android.shell;
+package com.concrn.app.shell;
 
-import software_nation.concrn.android.model.Constants;
-import software_nation.concrn.android.model.User;
-import software_nation.concrn.android.view.DialogView;
+import com.concrn.app.R;
+import com.concrn.app.model.Constants;
+import com.concrn.app.model.User;
+import com.concrn.app.view.DialogView;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
+    private static final String TAG = MainActivity.class.getName();
+    private static final boolean DEBUG = true;
+
 	HelperActivity helper;
 	MemoryManager memory;
 	EditText name, phone;
@@ -29,6 +33,12 @@ public class MainActivity extends FragmentActivity {
 		user = (User) memory.LoadPreferences(MainActivity.this, "LOGIN", User.class);
 		name = (EditText) findViewById(R.id.edit_name);
 		phone = (EditText)findViewById(R.id.edit_phone);
+
+        if(phone == null)
+        {
+            if(DEBUG)Log.d(TAG, "phone == null!");
+        }
+
 		if(user!=null){
 		//	name.setText(user.name);
 		//	phone.setText(user.phone);

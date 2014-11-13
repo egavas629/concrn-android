@@ -1,9 +1,9 @@
-package software_nation.concrn.android.view;
+package com.concrn.app.view;
 
 import java.util.ArrayList;
 
-import software_nation.concrn.android.model.Constants;
-import software_nation.concrn.android.shell.R;
+import com.concrn.app.R;
+import com.concrn.app.model.Constants;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

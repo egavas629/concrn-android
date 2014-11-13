@@ -1,11 +1,11 @@
-package software_nation.concrn.android.view;
+package com.concrn.app.view;
 
 import java.util.ArrayList;
 
-import software_nation.concrn.android.model.Constants;
-import software_nation.concrn.android.shell.GetReportAtributesActivity;
-import software_nation.concrn.android.shell.HelperActivity;
-import software_nation.concrn.android.shell.R;
+import com.concrn.app.model.Constants;
+import com.concrn.app.shell.GetReportAtributesActivity;
+import com.concrn.app.shell.HelperActivity;
+import com.concrn.app.R;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -13,7 +13,6 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 

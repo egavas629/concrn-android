@@ -1,14 +1,15 @@
-package software_nation.concrn.android.shell;
+package com.concrn.app.shell;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import com.concrn.app.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import software_nation.concrn.android.model.Constants;
-import software_nation.concrn.android.view.ShowCallDialogView;
+import com.concrn.app.model.Constants;
+import com.concrn.app.view.ShowCallDialogView;
 import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
@@ -36,6 +37,9 @@ import com.google.android.gms.maps.model.VisibleRegion;
 
 public class MapActivity extends FragmentActivity 
 {
+    private static final String TAG = MapActivity.class.getName();
+    private static final boolean DEBUG = true;
+
 	private GoogleMap mMap;
 	TextView address;
 	double currentLongitude = 0;
@@ -51,13 +55,15 @@ public class MapActivity extends FragmentActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.map_view);
+        if(DEBUG)Log.d(TAG, "onCreate");
+        setContentView(R.layout.map_view);
 		address = (TextView) findViewById(R.id.text_street_name);
 
 		setUpMapIfNeeded();
 	}
 
 	private void setUpMapIfNeeded() {
+        if(DEBUG)Log.d(TAG, "setUpMapIfNeeded");
 		//checking if map is loaded
 		if (mMap == null) 
 		{
@@ -71,13 +77,18 @@ public class MapActivity extends FragmentActivity
 
 						@Override
 						public void onMyLocationChange(Location arg0) {
+                            if(DEBUG)Log.d(TAG, "onMyLocationChange");
 
 							
 							currentLongitude = arg0.getLongitude();
 							currentLatitude = arg0.getLatitude();
 
+                            if(DEBUG)Log.d(TAG , "my location: "+arg0);
+                            if(DEBUG)Log.d(TAG , "my lng: "+currentLongitude);
+                            if(DEBUG)Log.d(TAG , "my lat: "+currentLatitude);
 							
 							if(!hasUpdatedPosition) {
+                                if(DEBUG)Log.d(TAG, "hasUpdatedPosition: animate camera!");
 								mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude, currentLongitude), 18.0f));
 								hasUpdatedPosition = true;
 							}
@@ -91,6 +102,7 @@ public class MapActivity extends FragmentActivity
 					mMap.setMyLocationEnabled(false);
 				    mMap.setOnCameraChangeListener(new OnCameraChangeListener() {
 					public void onCameraChange(CameraPosition arg0) {
+                        if(DEBUG)Log.d(TAG, "onCameraChange: "+arg0.target);
 						position = arg0.target;
 						if (position != null&& position.latitude != 0&& position.longitude != 0) 
 						{
@@ -104,7 +116,9 @@ public class MapActivity extends FragmentActivity
 	}
 
 	private void setUpMapSettings(GoogleMap mMap2) {
-		UiSettings mUiSettings;
+        if(DEBUG)Log.d(TAG, "setUpMapSettings");
+
+        UiSettings mUiSettings;
 		mUiSettings = mMap2.getUiSettings();
 		mUiSettings.setZoomControlsEnabled(false);
 		mUiSettings.setCompassEnabled(true);
@@ -119,7 +133,9 @@ public class MapActivity extends FragmentActivity
 
 	//getting address of the marker position 
 	private String getAddressByLongitudeAndLatitude(double longitude,double latitude) {
-		Geocoder geocoder;
+        if(DEBUG)Log.d(TAG, "getAddressByLongitudeAndLatitude");
+
+        Geocoder geocoder;
 		String result = null;
 		List<Address> addresses = null;
 		geocoder = new Geocoder(this, Locale.getDefault());
@@ -132,7 +148,9 @@ public class MapActivity extends FragmentActivity
 				result = addresses.get(0).getAddressLine(0);
 
 		} catch (IOException e) {
-			Constants.report.address = "Address unavailable";
+            if(DEBUG)Log.d(TAG, "getAddressByLongitudeAndLatitude: IOException");
+
+            Constants.report.address = "Address unavailable";
 			result = "Address unavailable";
 			e.printStackTrace();
 		}
@@ -141,7 +159,10 @@ public class MapActivity extends FragmentActivity
 
 	//getting values and go to next screen	
 	public void ReportCrises(View v) {
-		if(position!=null){
+        if(DEBUG)Log.d(TAG, "ReportCrises");
+
+        if(position!=null){
+            if(DEBUG)Log.d(TAG, " position != null");
 			Constants.report.latitude =position.latitude;
 			Constants.report.longitude =position.longitude;
 		}
@@ -153,16 +174,19 @@ public class MapActivity extends FragmentActivity
 
 		@Override
 		protected String doInBackground(String... arg0) {
-			HelperActivity helper = new HelperActivity(MapActivity.this);
+            HelperActivity helper = new HelperActivity(MapActivity.this);
 			String url = Constants.BASE_URL + "/reports";
 			String result = helper.POST(url, getReport(), null);
 			return result;
 		}
 		
 		protected void onPostExecute(String result) {
+
+            if(DEBUG)Log.d(TAG, "onPostExecute("+result+")");
+
 			JSONObject jObj;
-			
-			try {
+
+            try {
 				jObj = new JSONObject(result);
 				Constants.report.id = 0;
 				if(jObj.getString("id") != null && !jObj.getString("id").equalsIgnoreCase("null")) {
@@ -173,9 +197,11 @@ public class MapActivity extends FragmentActivity
 					Toast.makeText(getApplicationContext(), "Report successfully submitted to "+jObj.getJSONObject("agency").getString("name"), Toast.LENGTH_LONG).show();
 					new HelperActivity(MapActivity.this).startActivity(GetReportAtributesActivity.class);
 				} else {
-					Toast.makeText(getApplicationContext(), "There was an error uploading your report", Toast.LENGTH_LONG).show();
+                    if(DEBUG)Log.d(TAG, "onPostExecute: error id !> 0");
+                    Toast.makeText(getApplicationContext(), "There was an error uploading your report", Toast.LENGTH_LONG).show();
 				}
 			}catch (JSONException e) {
+                if(DEBUG)Log.d(TAG, "onPostExecute: error exception");
 				Toast.makeText(getApplicationContext(), "There was an error uploading your report", Toast.LENGTH_LONG).show();
 				e.printStackTrace();
 			}
@@ -197,7 +223,7 @@ public class MapActivity extends FragmentActivity
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
-		Log.v("Result using JSON:", request.toString());
+		if(DEBUG)Log.d(TAG, "Result using JSON: "+ request.toString());
 
 		return request;
 	}
@@ -218,8 +244,10 @@ public class MapActivity extends FragmentActivity
 	 */
 
 	private void getCentrePoint(){
+        if(DEBUG)Log.d(TAG, "getCentrePoint");
 
-		visibleRegion = mMap.getProjection() .getVisibleRegion();
+
+        visibleRegion = mMap.getProjection() .getVisibleRegion();
 
 		Point x = mMap.getProjection().toScreenLocation(visibleRegion.farRight);
 

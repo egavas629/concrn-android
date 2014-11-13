@@ -1,4 +1,4 @@
-package software_nation.concrn.android.model;
+package com.concrn.app.model;
 
 
 public class Constants {

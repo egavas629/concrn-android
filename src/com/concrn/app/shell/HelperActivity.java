@@ -1,4 +1,4 @@
-package software_nation.concrn.android.shell;
+package com.concrn.app.shell;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -150,7 +150,8 @@ public class HelperActivity {
 			HttpPost httpPost = new HttpPost(url);
 			
 			if(data!=null){
-				
+
+
 		        
 				MultipartEntityBuilder multipartEntity = MultipartEntityBuilder.create();
 				multipartEntity.addPart("report", new StringBody(jsonObject.getJSONObject("report").toString(), ContentType.TEXT_PLAIN));

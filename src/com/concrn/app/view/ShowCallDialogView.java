@@ -1,8 +1,7 @@
-package software_nation.concrn.android.view;
+package com.concrn.app.view;
 
-import software_nation.concrn.android.model.Constants;
-import software_nation.concrn.android.shell.HelperActivity;
-import software_nation.concrn.android.shell.R;
+import com.concrn.app.shell.HelperActivity;
+import com.concrn.app.R;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -10,34 +9,32 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
-public class DialogView extends DialogFragment {
+public class ShowCallDialogView extends DialogFragment {
 	HelperActivity helper;
 
-	public DialogView() {
+	public ShowCallDialogView() {
 	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		final Dialog dialogView = new Dialog(getActivity());
 		dialogView.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialogView.setContentView(R.layout.dialog_box);
+		dialogView.setContentView(R.layout.call_dialog_box);
 
 		helper = new HelperActivity(getActivity());
+
 		Button buttonOk = (Button) dialogView.findViewById(R.id.bt_ok);
 		buttonOk.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Constants.isPositionAllowed = true;
-				dialogView.cancel();
+				helper.makeCall("911");
 			}
 		});
 
-		Button buttonDontAllow = (Button) dialogView
-				.findViewById(R.id.bt_negative);
-		buttonDontAllow.setOnClickListener(new Button.OnClickListener() {
+		Button cancel = (Button) dialogView.findViewById(R.id.bt_negative);
+		cancel.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Constants.isPositionAllowed = false;
 				dialogView.cancel();
 			}
 		});

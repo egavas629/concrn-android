@@ -1,4 +1,4 @@
-package software_nation.concrn.android.view;
+package com.concrn.app.view;
 
 public interface Item {
 	public boolean isSection();

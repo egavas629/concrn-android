@@ -1,2 +1,7 @@
 bin/
 gen/
+.idea/
+build.xml
+*.iml
+local.properties
+concrn-release.keystore

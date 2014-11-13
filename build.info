@@ -1,0 +1,15 @@
+RELEASE_KEYSTORE=concrn-release.keystore
+RELEASE_ALIAS=concrn-release
+
+UNSIGNED_RELEASE_APK=bin/MainActivity-release-unsigned.apk
+OUTPUT_RELEASE_APK=bin/Concrn.apk
+
+function assertIsZero {
+    if [ $1 -ne 0 ]
+    then
+        echo "Failed"
+        exit 1
+    fi
+}
+
+

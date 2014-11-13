@@ -1,6 +1,6 @@
-package software_nation.concrn.android.shell;
+package com.concrn.app.shell;
 
-import software_nation.concrn.android.model.User;
+import com.concrn.app.model.User;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;

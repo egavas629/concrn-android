@@ -1,21 +1,22 @@
-package software_nation.concrn.android.shell;
+package com.concrn.app.shell;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 
+import com.concrn.app.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import software_nation.concrn.android.model.Constants;
-import software_nation.concrn.android.model.Report;
-import software_nation.concrn.android.view.EntryAdapter;
-import software_nation.concrn.android.view.EntryItem;
-import software_nation.concrn.android.view.Item;
-import software_nation.concrn.android.view.SectionItem;
-import software_nation.concrn.android.view.ShowCallDialogView;
-import software_nation.concrn.android.view.ShowSublistItemsDialogView;
+import com.concrn.app.model.Constants;
+import com.concrn.app.model.Report;
+import com.concrn.app.view.EntryAdapter;
+import com.concrn.app.view.EntryItem;
+import com.concrn.app.view.Item;
+import com.concrn.app.view.SectionItem;
+import com.concrn.app.view.ShowCallDialogView;
+import com.concrn.app.view.ShowSublistItemsDialogView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

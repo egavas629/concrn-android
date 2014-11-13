@@ -1,8 +1,6 @@
-package software_nation.concrn.android.view;
+package com.concrn.app.view;
 
 import java.util.ArrayList;
-
-import software_nation.concrn.android.shell.R;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -11,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.concrn.app.R;
 
 public class DialogViewListAdapter extends BaseAdapter {
 	ArrayList<Item> items = new ArrayList<Item>();
