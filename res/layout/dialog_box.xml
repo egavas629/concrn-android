@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:text="@string/bt_dont_allow"
-            android:textColor="@color/blue" />
+            android:textColor="@color/purple" />
 
         <Button
             android:id="@+id/bt_ok"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:text="@string/bt_ok"
-            android:textColor="@color/blue" />
+            android:textColor="@color/purple" />
     </LinearLayout>
 
 </LinearLayout>
